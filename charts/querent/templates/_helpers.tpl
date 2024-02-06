@@ -53,9 +53,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Semantic Service Selector labels
 */}}
-{{- define "querent.semanticService.selectorLabels" -}}
+{{- define "querent.semantic_service.selectorLabels" -}}
 {{ include "querent.selectorLabels" . }}
-app.kubernetes.io/component: semanticService
+app.kubernetes.io/component: semantic_service
 {{- end }}
 
 {{/*

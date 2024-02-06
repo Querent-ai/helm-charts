@@ -90,10 +90,10 @@ environment:
   {}
   # KEY: VALUE
 
-semanticService:
+semantic_service:
   replicaCount: 1
 
-  # Extra env for semanticService
+  # Extra env for semantic_service
   extraEnv:
     {}
     # KEY: VALUE
