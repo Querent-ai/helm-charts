@@ -28,8 +28,6 @@ data:
     storage_configs:
       {{ if .Values.node_config.storage_configs }}
       {{ .Values.node_config.storage_configs | toYaml | nindent 6 }}
-      {{- else }}
-      []
       {{- end }}
     tracing:
       jaeger:
