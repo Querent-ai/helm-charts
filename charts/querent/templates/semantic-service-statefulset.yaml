@@ -7,7 +7,7 @@ metadata:
 spec:
   replicas: {{ .Values.semanticService.replicaCount }}
   serviceName: {{ include "querent.fullname" . }}-headless
-  {{- if .Values.searcher.podManagementPolicy }}
+  {{- if .Values.semanticService.podManagementPolicy }}
   podManagementPolicy: {{ .Values.semanticService.podManagementPolicy }}
   {{- end }}
   selector:
@@ -17,12 +17,11 @@ spec:
     {{- toYaml .Values.semanticService.updateStrategy | nindent 4 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-      {{- with .Values.podAnnotations }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "querent.semanticService.selectorLabels" . | nindent 8 }}
     spec:
@@ -94,7 +93,7 @@ spec:
         resources:
           requests:
             storage: "{{ .Values.semanticService.persistentVolume.storage }}"
-      {{- if .Values.semanticService.persistentVolume.storageClass }}
+        {{- if .Values.semanticService.persistentVolume.storageClass }}
         storageClassName: "{{ .Values.semanticService.persistentVolume.storageClass }}"
-      {{- end }}
+        {{- end }}
   {{- end }}
