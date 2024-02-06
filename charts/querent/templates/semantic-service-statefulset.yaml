@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "querent.fullname" . }}-semantics
+  labels:
+    {{- include "querent.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.semantics.replicaCount }}
+  serviceName: {{ include "querent.fullname" . }}-headless
+  {{- if .Values.semantics.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.semantics.podManagementPolicy }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "querent.semantics.selectorLabels" . | nindent 6 }}
+  updateStrategy:
+    {{- toYaml .Values.semantics.updateStrategy | nindent 4 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "querent.semantics.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "querent.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- include "querent.environment" . | nindent 12 }}
+            {{- range $key, $value := .Values.semantics.extraEnv }}
+            - name: "{{ $key }}"
+              value: "{{ $value }}"
+            {{- end }}
+          ports:
+            {{- include "querent.ports" . | nindent 12 }}
+          startupProbe:
+            {{- toYaml .Values.semantics.startupProbe | nindent 12 }}
+          livenessProbe:
+            {{- toYaml .Values.semantics.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.semantics.readinessProbe | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /querent/node.yaml
+              subPath: node.yaml
+            - name: data
+              mountPath: /querent/quester_data
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "querent.fullname" . }}
+            items:
+              - key: node.yaml
+                path: node.yaml
+        {{- if ne .Values.semantics.persistentVolume.enabled true }}
+        - name: data
+          emptyDir: {}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- if .Values.semantics.persistentVolume.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: "{{ .Values.semantics.persistentVolume.storage }}"
+        {{- if .Values.semantics.persistentVolume.storageClass }}
+        storageClassName: "{{ .Values.semantics.persistentVolume.storageClass }}"
+        {{- end }}
+  {{- end }}

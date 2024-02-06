@@ -1,0 +1,29 @@
+apiVersion: v2
+name: querent
+description: Semantic Knowledge Graph Engine and GNN Catalyst
+type: application
+version: 0.0.1
+appVersion: "v0.0.3-rc9"
+keywords:
+  - querent
+  - llms
+  - semantic
+  - knowledge
+  - graph
+  - gnn
+  - scalable
+  - distributed
+  - semantic-search
+  - reasoning
+  - search
+  - analytics
+  - tracing
+  - logs
+home: https://querent.xyz/
+sources:
+  - https://github.com/querent-ai/quester/
+icon: https://avatars.githubusercontent.com/u/141601270?s=200&v=4
+maintainers:
+  - name: Querent
+    email: contact@querent.xyz
+    url: https://querent.xyz/
