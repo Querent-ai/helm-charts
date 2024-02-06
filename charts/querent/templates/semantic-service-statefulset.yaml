@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "querent.fullname" . }}-semantic-service
+  name: {{ include "querent.fullname" . }}-semanticService
   labels:
     {{- include "querent.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.semantic-service.replicaCount }}
+  replicas: {{ .Values.semanticService.replicaCount }}
   serviceName: {{ include "querent.fullname" . }}-headless
   {{- if .Values.searcher.podManagementPolicy }}
-  podManagementPolicy: {{ .Values.semantic-service.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.semanticService.podManagementPolicy }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "querent.semantic-service.selectorLabels" . | nindent 6 }}
+      {{- include "querent.semanticService.selectorLabels" . | nindent 6 }}
   updateStrategy:
-    {{- toYaml .Values.semantic-service.updateStrategy | nindent 4 }}
+    {{- toYaml .Values.semanticService.updateStrategy | nindent 4 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -24,7 +24,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "querent.semantic-service.selectorLabels" . | nindent 8 }}
+        {{- include "querent.semanticService.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -41,18 +41,18 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- include "querent.environment" . | nindent 12 }}
-            {{- range $key, $value := .Values.semantic-service.extraEnv }}
+            {{- range $key, $value := .Values.semanticService.extraEnv }}
             - name: "{{ $key }}"
               value: "{{ $value }}"
             {{- end }}
           ports:
             {{- include "querent.ports" . | nindent 12 }}
           startupProbe:
-            {{- toYaml .Values.semantic-service.startupProbe | nindent 12 }}
+            {{- toYaml .Values.semanticService.startupProbe | nindent 12 }}
           livenessProbe:
-            {{- toYaml .Values.semantic-service.livenessProbe | nindent 12 }}
+            {{- toYaml .Values.semanticService.livenessProbe | nindent 12 }}
           readinessProbe:
-            {{- toYaml .Values.semantic-service.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.semanticService.readinessProbe | nindent 12 }}
           volumeMounts:
             - name: config
               mountPath: /querent/node.yaml
@@ -68,7 +68,7 @@ spec:
             items:
               - key: node.yaml
                 path: node.yaml
-        {{- if ne .Values.semantic-service.persistentVolume.enabled true }}
+        {{- if ne .Values.semanticService.persistentVolume.enabled true }}
         - name: data
           emptyDir: {}
         {{- end }}
@@ -84,7 +84,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-  {{- if .Values.semantic-service.persistentVolume.enabled }}
+  {{- if .Values.semanticService.persistentVolume.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: data
@@ -93,8 +93,8 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: "{{ .Values.semantic-service.persistentVolume.storage }}"
-      {{- if .Values.semantic-service.persistentVolume.storageClass }}
-        storageClassName: "{{ .Values.semantic-service.persistentVolume.storageClass }}"
+            storage: "{{ .Values.semanticService.persistentVolume.storage }}"
+      {{- if .Values.semanticService.persistentVolume.storageClass }}
+        storageClassName: "{{ .Values.semanticService.persistentVolume.storageClass }}"
       {{- end }}
   {{- end }}

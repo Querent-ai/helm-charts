@@ -86,17 +86,20 @@ securityContext:
   runAsUser: 1005
 
 # Additional global env
-environment: {}
+environment:
+  {}
   # KEY: VALUE
 
-semantic-service:
+semanticService:
   replicaCount: 1
 
-  # Extra env for semantic-service
-  extraEnv: {}
+  # Extra env for semanticService
+  extraEnv:
+    {}
     # KEY: VALUE
 
-  resources: {}
+  resources:
+    {}
     # limits:
     #   cpu: 100m
     #   memory: 128Mi
@@ -105,11 +108,13 @@ semantic-service:
     #   memory: 128Mi
 
   ## Pod distruption budget
-  podDisruptionBudget: {}
+  podDisruptionBudget:
+    {}
     # maxUnavailable: 1
     # minAvailable: 2
 
-  updateStrategy: {}
+  updateStrategy:
+    {}
     # type: RollingUpdate
 
   startupProbe:
@@ -146,7 +151,8 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -159,7 +165,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
