@@ -1,0 +1,37 @@
+apiVersion: v1
+entries:
+  querent:
+  - apiVersion: v2
+    appVersion: v0.0.3-rc9
+    created: "2024-02-06T18:18:02.996937927Z"
+    description: Semantic Knowledge Graph Engine and GNN Catalyst
+    digest: 818cd762a0982f08d9c7fbda8198c65a679a3cf4e9490eb7cc32c7c946d78c66
+    home: https://querent.xyz/
+    icon: https://avatars.githubusercontent.com/u/141601270?s=200&v=4
+    keywords:
+    - querent
+    - llms
+    - semantic
+    - knowledge
+    - graph
+    - gnn
+    - scalable
+    - distributed
+    - semantic-search
+    - reasoning
+    - search
+    - analytics
+    - tracing
+    - logs
+    maintainers:
+    - email: contact@querent.xyz
+      name: Querent
+      url: https://querent.xyz/
+    name: querent
+    sources:
+    - https://github.com/querent-ai/quester/
+    type: application
+    urls:
+    - https://github.com/Querent-ai/helm-charts/releases/download/querent-0.0.1/querent-0.0.1.tgz
+    version: 0.0.1
+generated: "2024-02-06T18:18:02.996943918Z"
