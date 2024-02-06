@@ -51,11 +51,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Indexer Selector labels
+Semantic Service Selector labels
 */}}
-{{- define "querent.indexer.selectorLabels" -}}
+{{- define "querent.semantic-service.selectorLabels" -}}
 {{ include "querent.selectorLabels" . }}
-app.kubernetes.io/component: indexer
+app.kubernetes.io/component: semantic-service
 {{- end }}
 
 {{/*
@@ -66,5 +66,51 @@ Create the name of the service account to use
 {{- default (include "querent.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+{{/*
+Querent ports
+*/}}
+{{- define "querent.ports" -}}
+- name: rest
+  containerPort: 1111
+  protocol: TCP
+- name: discovery
+  containerPort: 2222
+  protocol: UDP
+- name: grpc
+  containerPort: 3333
+  protocol: TCP
+{{- end }}
+
+{{/*
+Querent environment
+*/}}
+{{- define "querent.environment" -}}
+- name: NAMESPACE
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: POD_NAME
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.name
+- name: POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath: status.podIP
+- name: QUESTER_NODE_CONFIG
+  value: node.yaml
+- name: QUESTER_CLUSTER_ID
+  value: {{ .Release.Namespace }}-{{ include "querent.fullname" . }}
+- name: QUESTER_NODE_ID
+  value: "$(POD_NAME)"
+- name: QUESTER_PEER_SEEDS
+  value: {{ include "querent.fullname" . }}-headless
+- name: QUESTER_ADVERTISE_ADDRESS
+  value: "$(POD_IP)"
+{{- range $key, $value := .Values.environment }}
+- name: "{{ $key }}"
+  value: "{{ $value }}"
 {{- end }}
 {{- end }}
