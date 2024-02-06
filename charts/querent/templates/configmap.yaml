@@ -19,7 +19,6 @@ data:
     grpc_listen_port: {{ .Values.node_config.grpc_listen_port }}
     cpu_capacity: {{ .Values.node_config.cpu_capacity }}
     peer_seeds: {{ .Values.node_config.peer_seeds | toYaml | nindent 4 }}
-
     # -------------------------------- Restful Configuration --------------------------------
     rest_config:
       listen_port: {{ .Values.node_config.rest_config.listen_port }}
@@ -27,11 +26,13 @@ data:
         {{- toYaml .Values.node_config.rest_config.cors_allow_origins | nindent 8 }}
       extra_headers:
         {{- toYaml .Values.node_config.rest_config.extra_headers | nindent 8 }}
-
     # -------------------------------- Storage Configuration --------------------------------
     storage_configs:
-      {{- toYaml .Values.node_config.storage_configs | nindent 6 }}
-
+      {{ if .Values.node_config.storage_configs }}
+      {{ .Values.node_config.storage_configs | toYaml | nindent 6 }}
+      {{- else }}
+      []
+      {{- end }}
     # -------------------------------- Distributed Tracing Configuration --------------------------------
     tracing:
       jaeger:
