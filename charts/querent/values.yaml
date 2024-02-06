@@ -131,7 +131,7 @@ semantics:
 
   readinessProbe:
     httpGet:
-      path: /health/readyz
+      path: /health/livez
       port: rest
 
   nodeSelector: {}
