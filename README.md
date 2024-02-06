@@ -1,4 +1,4 @@
-# Querent Helm Chart
+# Querent Helm Charts
 
 ## Usage
 
