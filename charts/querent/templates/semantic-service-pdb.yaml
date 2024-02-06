@@ -1,13 +1,13 @@
-{{- if .Values.semantic_service.podDisruptionBudget -}}
+{{- if .Values.semantics.podDisruptionBudget -}}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "querent.fullname" . }}-semantic_service
+  name: {{ include "querent.fullname" . }}-semantics
   labels:
     {{- include "querent.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      {{- include "querent.semantic_service.selectorLabels" . | nindent 6 }}
-  {{- toYaml .Values.semantic_service.podDisruptionBudget | nindent 2 }}
+      {{- include "querent.semantics.selectorLabels" . | nindent 6 }}
+  {{- toYaml .Values.semantics.podDisruptionBudget | nindent 2 }}
 {{- end -}}

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "querent.fullname" . }}-semantic_service
+  name: {{ include "querent.fullname" . }}-semantics
   labels:
     {{- include "querent.labels" . | nindent 4 }}
 spec:
