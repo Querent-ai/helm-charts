@@ -18,7 +18,7 @@ data:
     gossip_listen_port: {{ .Values.node_config.gossip_listen_port }}
     grpc_listen_port: {{ .Values.node_config.grpc_listen_port }}
     cpu_capacity: {{ .Values.node_config.cpu_capacity }}
-    peer_seeds:  {{- if .Values.node_config.peer_seeds }} {{ .Values.node_config.peer_seeds | toYaml | nindent 6 }} {{- else }} [] {{- end }} 
+    peer_seeds: {{- if .Values.node_config.peer_seeds }}{{ .Values.node_config.peer_seeds | toYaml | nindent 6 }}{{- else }}""{{- end }}
     rest_config:
       listen_port: {{ .Values.node_config.rest_config.listen_port }}
       cors_allow_origins:
@@ -26,8 +26,8 @@ data:
       extra_headers:
         {{- toYaml .Values.node_config.rest_config.extra_headers | nindent 8 }}
     storage_configs:
-      {{ if .Values.node_config.storage_configs }}
-      {{ .Values.node_config.storage_configs | toYaml | nindent 6 }}
+      {{- if .Values.node_config.storage_configs }}
+      {{- .Values.node_config.storage_configs | toYaml | nindent 6 }}
       {{- end }}
     tracing:
       jaeger:
