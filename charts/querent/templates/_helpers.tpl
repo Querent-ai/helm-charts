@@ -100,7 +100,7 @@ Querent environment
     fieldRef:
       fieldPath: status.podIP
 - name: QUESTER_NODE_CONFIG
-  value: node.yaml
+  value: /querent/node.yaml
 - name: QUESTER_CLUSTER_ID
   value: {{ .Release.Namespace }}-{{ include "querent.fullname" . }}
 - name: QUESTER_NODE_ID
