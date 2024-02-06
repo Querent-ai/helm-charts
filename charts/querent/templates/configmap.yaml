@@ -1,9 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "querent.fullname" . }}
-  labels:
-    {{- include "querent.labels" . | nindent 4 }}
+  name: { { include "querent.fullname" . } }
+  labels: { { - include "querent.labels" . | nindent 4 } }
 data:
   node.yaml: |-
     # ============================ Node Configuration ==============================
@@ -18,13 +17,17 @@ data:
     gossip_listen_port: {{ .Values.node_config.gossip_listen_port }}
     grpc_listen_port: {{ .Values.node_config.grpc_listen_port }}
     cpu_capacity: {{ .Values.node_config.cpu_capacity }}
+    peer_seeds:  {{- if .Values.node_config.peer_seeds }} {{ .Values.node_config.peer_seeds | toYaml | nindent 6 }} {{- else }} [] {{- end }} 
     rest_config:
       listen_port: {{ .Values.node_config.rest_config.listen_port }}
       cors_allow_origins:
         {{- toYaml .Values.node_config.rest_config.cors_allow_origins | nindent 8 }}
       extra_headers:
         {{- toYaml .Values.node_config.rest_config.extra_headers | nindent 8 }}
-    storage_configs: {{if .Values.node_config.storage_configs}}{{ .Values.node_config.storage_configs | toYaml | nindent 6 }}{{end}}
+    storage_configs:
+      {{ if .Values.node_config.storage_configs }}
+      {{ .Values.node_config.storage_configs | toYaml | nindent 6 }}
+      {{- end }}
     tracing:
       jaeger:
         enable_endpoint: {{ .Values.node_config.tracing.jaeger.enable_endpoint }}
